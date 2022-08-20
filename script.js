@@ -11,6 +11,13 @@ const image2 = eid('image2');
 const image3 = eid('image3');
 const textBox = eid('text-box');
 
+// Dark or Light Images
+function imageMode(color) {
+  image1.src = `img/undraw_proud_coder_${color}.svg`;
+  image2.src = `img/undraw_feeling_proud_${color}.svg`;
+  image3.src = `img/undraw_conceptual_idea_${color}.svg`;
+}
+
 // Dark Mode Styles
 function darkMode() {
   // change bg of nav and text box
@@ -19,13 +26,10 @@ function darkMode() {
 
   // Text that says dark mode light mode and the icon
   toggleIcon.children[0].textContent = 'Dark Mode';
-  toggleIcon.children[1].classList.remove('fa-sun');
-  toggleIcon.children[1].classList.add('fa-moon');
+  toggleIcon.children[1].classList.replace('fa-sun', 'fa-moon');
 
   // Images
-  image1.src = 'img/undraw_proud_coder_dark.svg';
-  image2.src = 'img/undraw_feeling_proud_dark.svg';
-  image3.src = 'img/undraw_conceptual_idea_dark.svg';
+  imageMode('dark');
 }
 
 // Light Mode Styles
@@ -36,27 +40,42 @@ function lightMode() {
 
   // Text that says dark mode light mode and the icon
   toggleIcon.children[0].textContent = 'Light Mode';
-  toggleIcon.children[1].classList.remove('fa-moon');
-  toggleIcon.children[1].classList.add('fa-sun');
+  toggleIcon.children[1].classList.replace('fa-moon', 'fa-sun');
 
   // Images
-  image1.src = 'img/undraw_proud_coder_light.svg';
-  image2.src = 'img/undraw_feeling_proud_light.svg';
-  image3.src = 'img/undraw_conceptual_idea_light.svg';
+  imageMode('light');
 }
+
+
 
 // Switch Theme Dynamically
 function switchTheme(event) {
   console.log(event.target.checked);
   if (event.target.checked) {
     document.documentElement.setAttribute('data-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
     darkMode();
   }
   else {
     document.documentElement.setAttribute('data-theme', 'light');
+    localStorage.setItem('theme', 'light');
     lightMode();
   }
 }
 
 // Event Listener
 toggleSwitch.addEventListener('change', switchTheme);
+
+// Check Local Storage For Theme
+const currentTheme = localStorage.getItem('theme');
+if (currentTheme) {
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    if (currentTheme === 'dark') {
+      toggleSwitch.checked = true;
+      darkMode();
+    } else {
+      toggleSwitch.checked = false;
+      lightMode();
+    }
+}
+
